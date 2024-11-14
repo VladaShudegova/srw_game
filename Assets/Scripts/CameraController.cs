@@ -4,18 +4,22 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private GameObject target; //цель камеры
+    [SerializeField] private GameObject _target; //цель камеры
+    [SerializeField] private float _smoothing;
+    [SerializeField] private Vector3 _offset;
 
-    Vector3 offset; //смещение относительно цели
+    //Vector3 offset; //смещение относительно цели
     // Start is called before the first frame update
     void Start()
     {
-        offset = transform.position - target.transform.position; //вычисляем смещение
+        //offset = transform.position - _target.transform.position; //вычисляем смещение
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        transform.position = target.transform.position + offset; //двигаем камеру за целью
+        //transform.position = _target.transform.position + offset; //двигаем камеру за целью
+
+        transform.position = _offset + Vector3.Lerp(transform.position, _target.transform.position, Time.deltaTime * _smoothing);
     }
 }

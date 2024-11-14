@@ -29,7 +29,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Movement"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""899c7265-90cf-4132-8275-f3434309f6e3"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -37,7 +37,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Jump"",
+                    ""name"": ""JumpPerformed"",
                     ""type"": ""Button"",
                     ""id"": ""90679097-2e16-49ae-9f56-1529300c5245"",
                     ""expectedControlType"": ""Button"",
@@ -109,7 +109,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Jump"",
+                    ""action"": ""JumpPerformed"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -121,7 +121,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Movement = m_Gameplay.FindAction("Movement", throwIfNotFound: true);
-        m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
+        m_Gameplay_Jump = m_Gameplay.FindAction("JumpPerformed", throwIfNotFound: true);
     }
 
     public void Dispose()

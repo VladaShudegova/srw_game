@@ -6,7 +6,11 @@ using UnityEngine.InputSystem;
 public class CharacterInputController : MonoBehaviour
 {
     public GameInput GameInput {  get; private set; }
-    private IControllable _controllable;
+
+    public event Action jumpPerformed;
+    public event Action jumpCanceled;
+
+    private Vector2 _inputDirection;
 
     private void Update()
     {
@@ -16,37 +20,41 @@ public class CharacterInputController : MonoBehaviour
     private void Awake() {
         GameInput = new GameInput();
         GameInput.Enable();
-
-        _controllable = GetComponent<IControllable>();
-
-        if (_controllable == null)
-        {
-            throw new Exception("Controller not installed");
-        }
-
     }
 
     private void OnEnable()
     {
         GameInput.Gameplay.Jump.performed += OnJumpPerformed;
+        GameInput.Gameplay.Jump.canceled += OnJumpCanceled;
     }
+
+
 
     private void OnDisable()
     {
         GameInput.Gameplay.Jump.performed -= OnJumpPerformed;
+        GameInput.Gameplay.Jump.canceled -= OnJumpCanceled;
     }
 
 
     private void OnJumpPerformed(InputAction.CallbackContext obj)
     {
-        _controllable.Jump();
+        jumpPerformed?.Invoke();
+    }
+
+    private void OnJumpCanceled(InputAction.CallbackContext obj)
+    {
+        jumpCanceled?.Invoke();
     }
 
     private void ReadMovement()
     {
         Vector2 inputDirection = GameInput.Gameplay.Movement.ReadValue<Vector2>();
-        
-        _controllable.InputUpdate(inputDirection);
+    }
+
+    public Vector2 GetInput()
+    {
+        return _inputDirection;
     }
 
 }
