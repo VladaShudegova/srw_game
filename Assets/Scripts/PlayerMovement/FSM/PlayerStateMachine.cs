@@ -1,7 +1,5 @@
-using System.Collections;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class PlayerStateMachine : StateMachine
 {
@@ -14,8 +12,9 @@ public class PlayerStateMachine : StateMachine
 
         _states = new Dictionary<Type, State>()
         {
-            [typeof(GroundedState)] = new GroundedState(this, _playerMovement, _inputController),
-            [typeof(JumpingState)]  = new JumpingState(this, _playerMovement, _inputController) 
+            [typeof(GroundedState)] = new GroundedState(this, _playerMovement),
+            [typeof(JumpingState)]  = new JumpingState(this, _playerMovement),
+            [typeof(FallingState)] = new FallingState(this, _playerMovement)
         };
     }
 

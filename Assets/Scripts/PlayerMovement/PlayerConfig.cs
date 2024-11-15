@@ -7,4 +7,9 @@ public class PlayerConfig : ScriptableObject
     public float MovementSmoothing;
 
     public float JumpHeight;
+    public float MaxFallingSpeed;
+    public float JumpBufferTime;
+
+    public float GroundDistance;
+    public LayerMask GroundLayerMask;
 }

@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc74b3e587c3c914fbb3c89fae87a365, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
-  MaxSpeed: 10
-  MovementSmoothing: 5
-  JumpHeight: 3
-  CheckerLayerMask:
+  MaxSpeed: 3
+  MovementSmoothing: 100
+  JumpHeight: 1.5
+  MaxFallingSpeed: 20
+  JumpBufferTime: 0.15
+  GroundDistance: 0.04
+  GroundLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  CheckerRadius: 0.01

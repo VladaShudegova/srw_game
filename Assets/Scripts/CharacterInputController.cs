@@ -1,4 +1,3 @@
-
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -28,8 +27,6 @@ public class CharacterInputController : MonoBehaviour
         GameInput.Gameplay.Jump.canceled += OnJumpCanceled;
     }
 
-
-
     private void OnDisable()
     {
         GameInput.Gameplay.Jump.performed -= OnJumpPerformed;
@@ -49,7 +46,7 @@ public class CharacterInputController : MonoBehaviour
 
     private void ReadMovement()
     {
-        Vector2 inputDirection = GameInput.Gameplay.Movement.ReadValue<Vector2>();
+        _inputDirection = GameInput.Gameplay.Movement.ReadValue<Vector2>();
     }
 
     public Vector2 GetInput()

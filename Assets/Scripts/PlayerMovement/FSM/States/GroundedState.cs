@@ -1,18 +1,15 @@
-
+using UnityEngine;
 
 public class GroundedState : PlayerBaseState
 {
-    private bool IsJuming;
-
-    public GroundedState(StateMachine stateMachine, PlayerMovement playerMovement, CharacterInputController inputController) : base(stateMachine, playerMovement, inputController)
+    public GroundedState(StateMachine stateMachine, PlayerMovement playerMovement) : base(stateMachine, playerMovement)
     {
     }
 
     public override void Enter()
     {
         base.Enter();
-        IsJuming = false;
-        inputController.jumpPerformed += () => IsJuming = true;
+        Debug.Log("Grounded State");
     }
 
     public override void Update()
@@ -24,9 +21,13 @@ public class GroundedState : PlayerBaseState
     {
         base.LogicUpdate();
 
-        if(IsJuming && grounded)
+        if (!s_grounded)
         {
-            IsJuming = false;
+            stateMachine.EnterIn<FallingState>();
+        }
+
+        if(playerMovement.Jump)
+        {
             stateMachine.EnterIn<JumpingState>();
         }
     }

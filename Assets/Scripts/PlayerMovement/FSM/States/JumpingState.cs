@@ -1,47 +1,50 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class JumpingState : PlayerBaseState
+public class JumpingState : AirState
 {
-    public JumpingState(StateMachine stateMachine, PlayerMovement playerMovement, CharacterInputController inputController) : base(stateMachine, playerMovement, inputController)
+    private float jumpSpeed;
+    public JumpingState(StateMachine stateMachine, PlayerMovement playerMovement) : base(stateMachine, playerMovement)
     {
     }
 
     public override void Enter()
     {
         base.Enter();
-        inputController.jumpCanceled += JumpCanceled;
-        _currentSpeed.y = Mathf.Sqrt(2 * playerMovement.JumpHeight * Mathf.Abs(Physics2D.gravity.y));
+        jumpSpeed = Mathf.Sqrt(2 * playerMovement.JumpHeight * Mathf.Abs(Physics2D.gravity.y));
+        s_currentSpeed.y = jumpSpeed;
+        Debug.Log("Jumping State");
     }
 
     public override void Update()
     {
         base.Update();
+
     }
 
     public override void Exit()
     {
         base.Exit();
-        inputController.jumpCanceled -= JumpCanceled;
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if(grounded)
+
+        if(!playerMovement.Jump)
+            JumpCanceled();
+
+        if(s_currentSpeed.y <= -jumpSpeed)
         {
-            _currentSpeed.y = 0f;
-            stateMachine.EnterIn<GroundedState>();
+            stateMachine.EnterIn<FallingState>();
+        }
+    }
+    
+    private void JumpCanceled()
+    {
+        if(s_currentSpeed.y > 0)
+        {
+            s_currentSpeed.y = 0;
         }
     }
 
-    private void JumpCanceled()
-    {
-        if(_currentSpeed.y > 0)
-        {
-            _currentSpeed.y = 0;
-        }
-    }
 }

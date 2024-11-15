@@ -2,38 +2,31 @@ using UnityEngine;
 
 public class PlayerBaseState : State
 {
-    protected CharacterInputController inputController;
     protected PlayerMovement playerMovement;
 
-    protected Vector2 _currentSpeed;
-    protected bool grounded;
+    protected static Vector2 s_currentSpeed;
+    protected static bool s_grounded;
 
-    public PlayerBaseState(StateMachine stateMachine, PlayerMovement playerMovement, CharacterInputController inputController) : base(stateMachine)
+    protected Vector2 inputDirection;
+
+    public PlayerBaseState(StateMachine stateMachine, PlayerMovement playerMovement) : base(stateMachine)
     {
-        this.inputController = inputController;
         this.playerMovement = playerMovement;
     }
 
     public override void Update()
     {
         base.Update();
+        inputDirection = playerMovement.InputDirection;
         Move();
+        CheckGround();
         CheckCollision();
     }
 
     private void Move()
     {
-        Vector2 inputDirection = inputController.GetInput();
-        _currentSpeed.x = Mathf.MoveTowards(_currentSpeed.x, inputDirection.x * playerMovement.MaxSpeed, playerMovement.MovementSmoothing * Time.deltaTime);
-        if(playerMovement.OnGround)
-        {
-            _currentSpeed.y = 0f;
-        }
-        else
-        {
-            _currentSpeed.y += Physics2D.gravity.y * Time.deltaTime;
-        }
-        playerMovement.transform.Translate(_currentSpeed * Time.deltaTime);
+        s_currentSpeed.x = Mathf.MoveTowards(s_currentSpeed.x, inputDirection.x * playerMovement.MaxSpeed, playerMovement.MovementSmoothing * Time.deltaTime);
+        playerMovement.transform.Translate(s_currentSpeed * Time.deltaTime);
     }
 
     private void CheckCollision()
@@ -52,11 +45,11 @@ public class PlayerBaseState : State
             {
                 playerMovement.transform.Translate(colliderDistance.pointA - colliderDistance.pointB);
             }
-
-            if (Vector2.Angle(colliderDistance.normal, Vector2.up) < 90 && _currentSpeed.y <= 0)
-            {
-                grounded = true;
-            }
         }
+    }
+    private void CheckGround()
+    {
+        BoxCollider2D collider = playerMovement.Collider;
+        s_grounded = Physics2D.BoxCast(collider.bounds.center, collider.size - new Vector2(0.1f, 0f), 0, Vector2.down, playerMovement.GroundDistance, playerMovement.GroundLayerMask);
     }
 }
